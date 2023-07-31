@@ -29,6 +29,15 @@ TEST(VectorTest, CanSubstractTwoVectors)
 }
 
 
+TEST(VectorTest, MultiplyByScalar)
+{
+    jmk::Vector3f vec (1., 2., 3.);
+    jmk::Vector3f result{vec * 5};
+    jmk::Vector3f expected(5., 10., 15.);
+    ASSERT_EQ(result, expected);
+}
+
+
 TEST(VectorTest, GreaterThanComparison)
 {
     jmk::Vector<int, 4> vec1 {1, 2, 3, 4};
@@ -43,7 +52,7 @@ TEST(VectorTest, LessThanComparison)
     jmk::Vector<int, 4> vec1 {1, 2, 3, 4};
     jmk::Vector<int, 4> vec2 {5, 6, 7, 8};
 
-    ASSERT_TRUE(vec1 < vec1);
+    ASSERT_TRUE(vec1 < vec2);
 }
 
 
@@ -89,8 +98,24 @@ TEST(VectorTest, Magnitude)
 TEST(VectorTest, Normalize)
 {
     jmk::Vector2f vec (4., 3.);
-    vec.normalize();
+    jmk::normalize(vec);
 
     jmk::Vector2f expected (4./ 5., 3. / 5.);
     ASSERT_EQ(vec, expected);
+}
+
+
+TEST(VectorTest, GetItem)
+{
+    jmk::Vector2f vec (4., 3.);
+    double x{vec[0]};
+    ASSERT_EQ(x, 4.);
+}
+
+
+TEST(VectorTest, SetItem)
+{
+    jmk::Vector2f vec (4., 3.);
+    vec[0] = 5.;
+    ASSERT_EQ(vec[0], 5.);
 }

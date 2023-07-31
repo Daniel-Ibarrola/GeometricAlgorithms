@@ -7,17 +7,15 @@
 
 #include <array>
 #include <initializer_list>
+#include <iostream>
 #include <stdexcept>
+#include "core.h"
 
 
 namespace jmk {
 
     constexpr std::size_t DIM2 {2};
     constexpr std::size_t DIM3 {3};
-
-//    constexpr std::size_t X {0};
-//    constexpr std::size_t Y {1};
-//    constexpr std::size_t Z {2};
 
     template<typename coordinate_type, std::size_t dimension = DIM3>
     class Vector {
@@ -46,18 +44,26 @@ namespace jmk {
 
         Vector(std::initializer_list<coordinate_type> coords) {
             if (coords.size() != dimension) {
-                throw std::invalid_argument("Incorrect number if elements for Vector initialization");
+                throw std::invalid_argument("Incorrect number of elements for Vector initialization");
             }
             std::copy(coords.begin(), coords.end(), m_coords.begin());
         }
 
-        void normalize() {
-
+        [[nodiscard]] double magnitude() const {
+            double sum {0.0};
+            for (auto ii {0}; ii < m_coords.size(); ++ii){
+                sum += m_coords[ii] * m_coords[ii];
+            }
+            return std::sqrt(sum);
         }
 
-        coordinate_type magnitude() const {
-            return {};
-        }
+        [[nodiscard]] std::size_t getDimensionality() const { return m_coords.size(); }
+
+        coordinate_type X() const { return m_coords[0]; }
+        coordinate_type Y() const { return m_coords[1]; }
+        coordinate_type Z() const { return m_coords[2]; }
+
+        // Comparison operators
 
         friend bool operator==(
                 const Vector<coordinate_type, dimension>& vec1,
@@ -74,81 +80,115 @@ namespace jmk {
         friend bool operator>(
                 const Vector<coordinate_type, dimension>& vec1,
                 const Vector<coordinate_type, dimension>& vec2){
+            for (auto ii {0}; ii < vec1.getDimensionality(); ++ii){
+                if (vec1.m_coords[ii] > vec2.m_coords[ii])
+                    return true;
+                else if (vec1.m_coords[ii] < vec2.m_coords[ii])
+                    return false;
+            }
             return false;
         }
 
         friend bool operator<(
                 const Vector<coordinate_type, dimension>& vec1,
                 const Vector<coordinate_type, dimension>& vec2){
-            return true;
+            for (auto ii {0}; ii < vec1.getDimensionality(); ++ii){
+                if (vec1.m_coords[ii] < vec2.m_coords[ii])
+                    return true;
+                else if (vec1.m_coords[ii] > vec2.m_coords[ii])
+                    return false;
+            }
+            return false;
         }
+
+        // Arithmetic operators
 
         friend Vector<coordinate_type, dimension> operator+(
                 const Vector<coordinate_type, dimension>& vec1,
                 const Vector<coordinate_type, dimension>& vec2){
-            return {};
+            Vector<coordinate_type, dimension> newVec;
+            for (auto ii {0}; ii < vec1.getDimensionality(); ++ii){
+                newVec.m_coords[ii] = vec1.m_coords[ii] + vec2.m_coords[ii];
+            }
+            return newVec;
         }
 
         friend Vector<coordinate_type, dimension> operator-(
                 const Vector<coordinate_type, dimension>& vec1,
                 const Vector<coordinate_type, dimension>& vec2){
-            return {};
+            Vector<coordinate_type, dimension> newVec;
+            for (auto ii {0}; ii < vec1.getDimensionality(); ++ii){
+                newVec.m_coords[ii] = vec1.m_coords[ii] - vec2.m_coords[ii];
+            }
+            return newVec;
+        }
+
+        friend Vector<coordinate_type, dimension> operator*(
+                const Vector<coordinate_type, dimension>& vec,
+                coordinate_type scalar){
+            // Multiply the vector by a scalar
+            Vector<coordinate_type, dimension> newVec;
+            for (auto ii {0}; ii < vec.getDimensionality(); ++ii){
+                newVec.m_coords[ii] = vec.m_coords[ii] * scalar;
+            }
+            return newVec;
+        }
+
+        // [] Operator
+        coordinate_type& operator[] (std::size_t index){
+            return m_coords[index];
+        }
+
+        coordinate_type operator[] (std::size_t index) const {
+            return m_coords[index];
+        }
+
+        // IO operators
+
+        friend std::ostream& operator<< (
+                std::ostream& out,
+                const Vector<coordinate_type, dimension>& vec
+                ){
+            out << "Vector(";
+            std::size_t dims {vec.getDimensionality()};
+            if (dims < 10){
+                for (auto ii {0}; ii < dims - 1; ++ii){
+                    out << vec.m_coords[ii] << ", ";
+                }
+                out << vec.m_coords[dims - 1];
+            }
+            else {
+                // Print the first 5 elements and the last 5
+                for (auto ii {0}; ii < 5; ++ii){
+                    out << vec.m_coords[ii] << ", ";
+                }
+                out << "... ";
+                for (auto ii {dims - 5}; ii > dims - 1; --ii){
+                    out << vec.m_coords[ii] << ", ";
+                }
+                out << vec.m_coords[dims - 1];
+            }
+            out << ")";
+            return out;
         }
 
     };
 
-    typedef Vector<double, DIM2> Vector2f;
-    typedef Vector<double, DIM3> Vector3f;
+    template <std::size_t dimension>
+    bool operator==(
+            const Vector<double, dimension>& vec1,
+            const Vector<double, dimension>& vec2
+            ){
+        return isEqualD(vec1.m_coords, vec2.m_coords);
+    }
 
-//    // Comparison operators
-//    template<typename coordinate_type, std::size_t dimension>
-//    bool operator== (
-//            const Vector<coordinate_type, dimension>& vec1,
-//            const Vector<coordinate_type, dimension>& vec2)
-//    {
-//        return vec1.m_coords == vec2.m_coords;
-//    }
-//
-//    template<typename coordinate_type, std::size_t dimension>
-//    bool operator!= (
-//            const Vector<coordinate_type, dimension>& vec1,
-//            const Vector<coordinate_type, dimension>& vec2)
-//    {
-//        return vec1.m_coords != vec2.m_coords;
-//    }
-//
-//    template<typename coordinate_type, std::size_t dimension>
-//    bool operator< (
-//            const Vector<coordinate_type, dimension>& vec1,
-//            const Vector<coordinate_type, dimension>& vec2)
-//    {
-//        return false;
-//    }
-//
-//    template<typename coordinate_type, std::size_t dimension>
-//    bool operator> (
-//            const Vector<coordinate_type, dimension>& vec1,
-//            const Vector<coordinate_type, dimension>& vec2)
-//    {
-//        return false;
-//    }
-//
-//    // Arithmetic operators
-//    template<typename coordinate_type, std::size_t dimension>
-//    Vector<coordinate_type, dimension> operator+ (
-//            const Vector<coordinate_type, dimension>& vec1,
-//            const Vector<coordinate_type, dimension>& vec2)
-//    {
-//        return {};
-//    }
-//
-//    template<typename coordinate_type, std::size_t dimension>
-//    Vector<coordinate_type, dimension> operator- (
-//            const Vector<coordinate_type, dimension>& vec1,
-//            const Vector<coordinate_type, dimension>& vec2)
-//    {
-//        return {};
-//    }
+    template <std::size_t dimension>
+    bool operator!=(
+            const Vector<double, dimension>& vec1,
+            const Vector<double, dimension>& vec2
+    ){
+        return !isEqualD(vec1.m_coords, vec2.m_coords);
+    }
 
     // Products
     template<typename coordinate_type, std::size_t dimension>
@@ -156,11 +196,26 @@ namespace jmk {
             const Vector<coordinate_type, dimension>& vec1,
             const Vector<coordinate_type, dimension>& vec2
             ){
-        return 0.;
+        coordinate_type product {0};
+        for (auto ii {0}; ii < vec1.getDimensionality(); ++ii){
+            product += vec1[ii] * vec2[ii];
+        }
+        return product;
     }
 
+    template <std::size_t dimension>
+    void normalize(Vector<double, dimension>& vec) {
+        double mag {vec.magnitude()};
+        for (auto ii {0}; ii < vec.getDimensionality(); ++ii){
+            vec[ii] /= mag;
+        }
+    }
+
+    typedef Vector<double, DIM2> Vector2f;
+    typedef Vector<double, DIM3> Vector3f;
+
     double crossProduct2D(const Vector2f &vec1, const Vector2f &vec2);
-    Vector3f crossProduct3D(const Vector3f &vec1, const Vector3f & vec3);
+    Vector3f crossProduct3D(const Vector3f &vec1, const Vector3f & vec2);
 
 }
 
