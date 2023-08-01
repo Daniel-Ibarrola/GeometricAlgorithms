@@ -6,6 +6,8 @@ add_executable(
         Google_Tests_run
         base/test_core.cpp
         base/test_vector.cpp
+        primitives/test_point.cpp
+        geometry/test_geo_utils.cpp
 )
 
 target_link_libraries(Google_Tests_run base)
