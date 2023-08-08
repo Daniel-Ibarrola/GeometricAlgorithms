@@ -5,13 +5,21 @@
 #ifndef GEOMETRICALGORITHMS_GEOUTILS_H
 #define GEOMETRICALGORITHMS_GEOUTILS_H
 
+#include "../base/core.h"
 #include "../primitives/point.h"
 
 namespace jmk {
 
-    int orientation3d(const Point3d& a, const Point3d& b, const Point3d& c);
-    int orientation2d(const Point2d& a, const Point2d& b, const Point2d& c);
-
+    RelativePosition orientation3d(
+            const Point3d& origin,
+            const Point3d& destination,
+            const Point3d& point
+            );
+    RelativePosition orientation2d(
+            const Point2d& origin,
+            const Point2d& destination,
+            const Point2d& point
+            );
 }
 
 #endif //GEOMETRICALGORITHMS_GEOUTILS_H

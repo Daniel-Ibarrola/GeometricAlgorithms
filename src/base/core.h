@@ -14,6 +14,16 @@ namespace jmk {
 
     bool isEqualD(double num1, double num2, double tolerance = TOLERANCE);
 
+    enum class RelativePosition {
+        LEFT,
+        RIGHT,
+        BEYOND,
+        BEHIND,
+        BETWEEN,
+        ORIGIN,
+        DESTINATION
+    };
+
     template<std::size_t dim>
     bool isEqualD(const std::array<double, dim>& arr1,
                   const std::array<double, dim>& arr2,

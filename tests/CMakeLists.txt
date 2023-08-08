@@ -11,4 +11,6 @@ add_executable(
 )
 
 target_link_libraries(Google_Tests_run base)
+target_link_libraries(Google_Tests_run geometry)
+target_link_libraries(Google_Tests_run primitives)
 target_link_libraries(Google_Tests_run gtest gtest_main)
