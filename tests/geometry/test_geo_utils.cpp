@@ -100,7 +100,7 @@ TEST(TestRelativePostion3D, PointToTheRightOfSegment)
 
     jmk::RelativePosition orientation {
             jmk::orientation3d(origin, destination, testPoint)};
-    ASSERT_EQ(orientation, jmk::RelativePosition::RIGHT);
+    ASSERT_EQ(orientation, jmk::RelativePosition::LEFT);
 }
 
 

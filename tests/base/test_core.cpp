@@ -16,8 +16,8 @@ TEST(TestCore, NumbersWithSmallDifferenceConsideredEqual)
 
 TEST(TestCore, NumbersWithBiggerDifferenceNotConsideredEqual)
 {
-    double num1 {0.0051};
-    double num2 {0.006};
+    double num1 {0.055};
+    double num2 {0.06};
 
     ASSERT_FALSE(jmk::isEqualD(num1, num2, 0.001));
 }
