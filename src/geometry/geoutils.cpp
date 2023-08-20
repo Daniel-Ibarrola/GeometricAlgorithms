@@ -22,6 +22,19 @@ double jmk::areaTriangle3D(
     return std::sqrt(sumOfPowers) / 2;
 }
 
+double jmk::areaTriangle2D(
+        const jmk::Point2d &origin,
+        const jmk::Point2d &destination,
+        const jmk::Point2d &point) {
+    // vector from origin to destination
+    Vector2f OD {destination - origin};
+    // vector from destination to point
+    Vector2f OP {point - origin};
+    return crossProduct2D(OD, OP) / 2;
+}
+
+// Relative position of point compared to line
+
 jmk::RelativePosition jmk::orientation3d(
         const Point3d& origin,
         const Point3d& destination,
@@ -62,17 +75,40 @@ jmk::RelativePosition jmk::orientation3d(
     return jmk::RelativePosition::BETWEEN;
 }
 
-
-double jmk::areaTriangle2D(
-        const jmk::Point2d &origin,
-        const jmk::Point2d &destination,
-        const jmk::Point2d &point) {
-    // vector from origin to destination
-    Vector2f OD {destination - origin};
-    // vector from destination to point
-    Vector2f OP {point - origin};
-    return crossProduct2D(OD, OP) / 2;
+bool jmk::left(
+        const Point3d& origin,
+        const Point3d& destination,
+        const Point3d& point){
+    return orientation3d(origin, destination, point) == RelativePosition::LEFT;
 }
+
+
+bool jmk::right(
+        const Point3d& origin,
+        const Point3d& destination,
+        const Point3d& point) {
+    return orientation3d(origin, destination, point) == RelativePosition::RIGHT;
+}
+
+
+bool jmk::leftOrBeyond(
+        const Point3d& origin,
+        const Point3d& destination,
+        const Point3d& point) {
+    RelativePosition orientation {orientation3d(origin, destination, point)};
+    return orientation == RelativePosition::LEFT ||
+           orientation == RelativePosition::BEYOND;
+}
+
+bool jmk::leftOrBetween(
+        const Point3d& origin,
+        const Point3d& destination,
+        const Point3d& point) {
+    RelativePosition orientation {orientation3d(origin, destination, point)};
+    return orientation == RelativePosition::LEFT ||
+           orientation == RelativePosition::BETWEEN;
+}
+
 
 jmk::RelativePosition jmk::orientation2d(
         const Point2d& origin,
@@ -110,4 +146,39 @@ jmk::RelativePosition jmk::orientation2d(
         return jmk::RelativePosition::BEYOND;
     // Point must be between
     return jmk::RelativePosition::BETWEEN;
+}
+
+
+bool jmk::left(
+        const jmk::Point2d &origin,
+        const jmk::Point2d &destination,
+        const jmk::Point2d &point){
+    return orientation2d(origin, destination, point) == RelativePosition::LEFT;
+}
+
+
+bool jmk::right(
+        const jmk::Point2d &origin,
+        const jmk::Point2d &destination,
+        const jmk::Point2d &point) {
+    return orientation2d(origin, destination, point) == RelativePosition::RIGHT;
+}
+
+
+bool jmk::leftOrBeyond(
+        const jmk::Point2d &origin,
+        const jmk::Point2d &destination,
+        const jmk::Point2d &point) {
+    RelativePosition orientation {orientation2d(origin, destination, point)};
+    return orientation == RelativePosition::LEFT ||
+        orientation == RelativePosition::BEYOND;
+}
+
+bool jmk::leftOrBetween(
+        const jmk::Point2d &origin,
+        const jmk::Point2d &destination,
+        const jmk::Point2d &point) {
+    RelativePosition orientation {orientation2d(origin, destination, point)};
+    return orientation == RelativePosition::LEFT ||
+           orientation == RelativePosition::BETWEEN;
 }
