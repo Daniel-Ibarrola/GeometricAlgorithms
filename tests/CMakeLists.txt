@@ -7,6 +7,7 @@ add_executable(
         base/test_core.cpp
         base/test_vector.cpp
         primitives/test_point.cpp
+        primitives/test_plane.cpp
         geometry/test_geo_utils.cpp
 )
 
