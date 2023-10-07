@@ -9,6 +9,7 @@ add_executable(
         primitives/test_point.cpp
         primitives/test_plane.cpp
         geometry/test_geo_utils.cpp
+        geometry/test_intersection.cpp
 )
 
 target_link_libraries(Google_Tests_run base)

@@ -35,6 +35,10 @@ namespace jmk {
         }
         return true;
     }
+
+    static bool _xor(bool x, bool y){
+        return x ^ y;
+    }
 }
 
 #endif //GEOMETRICALGORITHMS_CORE_H
