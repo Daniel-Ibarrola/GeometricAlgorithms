@@ -14,6 +14,11 @@ namespace jmk {
             const Point2d& l2_c, const Point2d& l2_d
             );
 
+    Point2d intersectionPoint(
+            const Point2d& l1_a, const Point2d& l1_b,
+            const Point2d& l2_c, const Point2d& l2_d
+    );
+
 }
 
 #endif //GEOMETRICALGORITHMS_INTERSECTION_H
